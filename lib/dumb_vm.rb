@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# typed: strong
 
 require_relative 'dumb_vm/version'
 
