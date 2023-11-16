@@ -4,7 +4,7 @@ require_relative 'lib/dumb_vm/version'
 
 Gem::Specification.new do |spec|
   spec.name = 'dumb_vm'
-  spec.version = DumbVm::VERSION
+  spec.version = DumbVM::VERSION
   spec.authors = ['Vraiment']
   spec.email = ['jemc44@gmail.com']
 

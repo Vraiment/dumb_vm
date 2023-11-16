@@ -2,7 +2,7 @@
 
 require_relative 'dumb_vm/version'
 
-module DumbVm
+module DumbVM
   class Error < StandardError; end
   # Your code goes here...
 end
