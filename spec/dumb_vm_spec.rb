@@ -2,10 +2,12 @@
 
 RSpec.describe DumbVm do
   it 'has a version number' do
-    expect(DumbVm::VERSION).not_to be nil
+    expect(DumbVm::VERSION).not_to be_nil
   end
 
   it 'does something useful' do
-    expect(true).to eq(true)
+    value = true
+
+    expect(value).to be(true)
   end
 end
