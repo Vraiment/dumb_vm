@@ -5,8 +5,15 @@ require 'rspec/core/rake_task'
 
 RSpec::Core::RakeTask.new(:spec)
 
+desc 'Run sorbet type checks'
+task :sorbet do
+  require 'English'
+
+  exit $CHILD_STATUS&.exitstatus || 1 unless system('srb')
+end
+
 require 'rubocop/rake_task'
 
 RuboCop::RakeTask.new
 
-task default: %i[spec rubocop]
+task default: %i[sorbet spec rubocop]
