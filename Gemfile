@@ -19,3 +19,5 @@ gem 'sorbet-runtime'
 group :development, :test do
   gem 'tapioca', require: false
 end
+
+gem 'yard', group: :development

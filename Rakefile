@@ -16,4 +16,8 @@ require 'rubocop/rake_task'
 
 RuboCop::RakeTask.new
 
-task default: %i[sorbet spec rubocop]
+require 'yard'
+
+YARD::Rake::YardocTask.new
+
+task default: %i[sorbet spec rubocop yard]

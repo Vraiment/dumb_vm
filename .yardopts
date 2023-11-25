@@ -1,0 +1,2 @@
+--fail-on-warning
+--files lib/**/*.rb lib/dumb_vm.rb # Ensure `dumb_vm.rb` is last as the top level documentation is there
