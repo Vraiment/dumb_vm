@@ -12,7 +12,7 @@ RSpec.describe VerySimpleCPU, :integ do
 
   shared_context 'with an initialized memory' do
     before do
-      cpu.memory = DumbVM::Memory.from_array(initial_memory.dup)
+      vs_cpu.memory = DumbVM::Memory.from_array(initial_memory.dup)
     end
   end
 
@@ -50,61 +50,61 @@ RSpec.describe VerySimpleCPU, :integ do
       let(:initial_memory) { instruction_word.to_a }
 
       it 'fetches the value defined by #pc to #iw' do
-        expect { cpu.fetch }.to change(cpu, :iw).from(0).to(instruction_word.to_i)
+        expect { vs_cpu.fetch }.to change(vs_cpu, :iw).from(0).to(instruction_word.to_i)
       end
     end
 
     it 'raises an exception when no memory is set' do
-      expect { cpu.fetch }.to raise_exception(DumbVM::InvalidStateException, /Memory not set/)
+      expect { vs_cpu.fetch }.to raise_exception(DumbVM::InvalidStateException, /Memory not set/)
     end
   end
 
   describe '#decode' do
     context 'when the instruction word is for the ADD operation' do
-      before { cpu.iw <= VerySimpleCPU::InstructionWord.new(opcode: 0b000, im: 1).to_i }
+      before { vs_cpu.iw <= VerySimpleCPU::InstructionWord.new(opcode: 0b000, im: 1).to_i }
 
       it 'returns :ADD' do
-        expect(cpu.decode).to be(:ADD)
+        expect(vs_cpu.decode).to be(:ADD)
       end
     end
 
     context 'when the instruction word is for the ADDi operation' do
-      before { cpu.iw <= VerySimpleCPU::InstructionWord.new(opcode: 0b000, im: 1).to_i }
+      before { vs_cpu.iw <= VerySimpleCPU::InstructionWord.new(opcode: 0b000, im: 1).to_i }
 
       it 'returns :ADDi' do
-        expect(cpu.decode).to be(:ADDi)
+        expect(vs_cpu.decode).to be(:ADDi)
       end
     end
 
     context 'when the instruction word is for the CP operation' do
-      before { cpu.iw <= VerySimpleCPU::InstructionWord.new(opcode: 0b100, im: 0).to_i }
+      before { vs_cpu.iw <= VerySimpleCPU::InstructionWord.new(opcode: 0b100, im: 0).to_i }
 
       it 'returns :CP' do
-        expect(cpu.decode).to be(:CP)
+        expect(vs_cpu.decode).to be(:CP)
       end
     end
 
     context 'when the instruction word is for the CPi operation' do
-      before { cpu.iw <= VerySimpleCPU::InstructionWord.new(opcode: 0b100, im: 1).to_i }
+      before { vs_cpu.iw <= VerySimpleCPU::InstructionWord.new(opcode: 0b100, im: 1).to_i }
 
       it 'returns :CPi' do
-        expect(cpu.decode).to be(:CPi)
+        expect(vs_cpu.decode).to be(:CPi)
       end
     end
 
     context 'when the instruction word is for the BZJ operation' do
-      before { cpu.iw <= VerySimpleCPU::InstructionWord.new(opcode: 0b110, im: 0).to_i }
+      before { vs_cpu.iw <= VerySimpleCPU::InstructionWord.new(opcode: 0b110, im: 0).to_i }
 
       it 'returns :BZJ' do
-        expect(cpu.decode).to be(:BZJ)
+        expect(vs_cpu.decode).to be(:BZJ)
       end
     end
 
     context 'when the instruction word is for the BZJi operation' do
-      before { cpu.iw <= VerySimpleCPU::InstructionWord.new(opcode: 0b110, im: 1).to_i }
+      before { vs_cpu.iw <= VerySimpleCPU::InstructionWord.new(opcode: 0b110, im: 1).to_i }
 
       it 'returns :BZJi' do
-        expect(cpu.decode).to be(:BZJi)
+        expect(vs_cpu.decode).to be(:BZJi)
       end
     end
   end
@@ -126,23 +126,23 @@ RSpec.describe VerySimpleCPU, :integ do
         expected_output = initial_memory.dup
         expected_output[0x04..0x07] = DumbVM.to_byte_array(0x04030201 + 0x0D0C0B0A)
 
-        expect { cpu.cycle }.to change { cpu.memory.content }.from(initial_memory).to(expected_output)
+        expect { vs_cpu.cycle }.to change { vs_cpu.memory.content }.from(initial_memory).to(expected_output)
       end
 
       it 'sets the instruction word' do
-        expect { cpu.cycle }.to change(cpu, :iw).from(0x00000000).to(instruction_word.to_i)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :iw).from(0x00000000).to(instruction_word.to_i)
       end
 
       it 'increases the program counter' do
-        expect { cpu.cycle }.to change(cpu, :pc).from(0x0000).to(0x0001)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :pc).from(0x0000).to(0x0001)
       end
 
       it 'sets the value for register 1' do
-        expect { cpu.cycle }.to change(cpu, :r1).from(0x00000000).to(0x04030201)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :r1).from(0x00000000).to(0x04030201)
       end
 
       it 'sets the value for register 2' do
-        expect { cpu.cycle }.to change(cpu, :r2).from(0x00000000).to(0x0D0C0B0A)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :r2).from(0x00000000).to(0x0D0C0B0A)
       end
     end
 
@@ -161,23 +161,23 @@ RSpec.describe VerySimpleCPU, :integ do
         expected_output = program.dup
         expected_output[0x04..0x07] = DumbVM.to_byte_array(0x4032CAB)
 
-        expect { cpu.cycle }.to change { cpu.memory.content }.from(program).to(expected_output)
+        expect { vs_cpu.cycle }.to change { vs_cpu.memory.content }.from(program).to(expected_output)
       end
 
       it 'sets the instruction word' do
-        expect { cpu.cycle }.to change(cpu, :iw).from(0x00000000).to(instruction_word.to_i)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :iw).from(0x00000000).to(instruction_word.to_i)
       end
 
       it 'increases the program counter' do
-        expect { cpu.cycle }.to change(cpu, :pc).from(0x0000).to(0x0001)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :pc).from(0x0000).to(0x0001)
       end
 
       it 'sets the value for register 1' do
-        expect { cpu.cycle }.to change(cpu, :r1).from(0x00000000).to(0x04030201)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :r1).from(0x00000000).to(0x04030201)
       end
 
       it 'sets the value for register 2' do
-        expect { cpu.cycle }.to change(cpu, :r2).from(0x00000000).to(0x00002AAA)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :r2).from(0x00000000).to(0x00002AAA)
       end
     end
 
@@ -197,23 +197,23 @@ RSpec.describe VerySimpleCPU, :integ do
         expected_output = program.dup
         expected_output[0x08..0x0B] = DumbVM.to_byte_array(0x87654321)
 
-        expect { cpu.cycle }.to change { cpu.memory.content }.from(program).to(expected_output)
+        expect { vs_cpu.cycle }.to change { vs_cpu.memory.content }.from(program).to(expected_output)
       end
 
       it 'sets the instruction word' do
-        expect { cpu.cycle }.to change(cpu, :iw).from(0x00000000).to(instruction_word.to_i)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :iw).from(0x00000000).to(instruction_word.to_i)
       end
 
       it 'increases the program counter' do
-        expect { cpu.cycle }.to change(cpu, :pc).from(0x0000).to(0x0001)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :pc).from(0x0000).to(0x0001)
       end
 
       it 'does not set the value for register 1' do
-        expect { cpu.cycle }.not_to change(cpu, :r1)
+        expect { vs_cpu.cycle }.not_to change(vs_cpu, :r1)
       end
 
       it 'sets the value for register 2' do
-        expect { cpu.cycle }.to change(cpu, :r2).from(0x00000000).to(0x87654321)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :r2).from(0x00000000).to(0x87654321)
       end
     end
 
@@ -232,23 +232,23 @@ RSpec.describe VerySimpleCPU, :integ do
         expected_output = program.dup
         expected_output[0x08..0x0B] = DumbVM.to_byte_array(0x00002BCD)
 
-        expect { cpu.cycle }.to change { cpu.memory.content }.from(program).to(expected_output)
+        expect { vs_cpu.cycle }.to change { vs_cpu.memory.content }.from(program).to(expected_output)
       end
 
       it 'sets the instruction word' do
-        expect { cpu.cycle }.to change(cpu, :iw).from(0x00000000).to(instruction_word.to_i)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :iw).from(0x00000000).to(instruction_word.to_i)
       end
 
       it 'increases the program counter' do
-        expect { cpu.cycle }.to change(cpu, :pc).from(0x0000).to(0x0001)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :pc).from(0x0000).to(0x0001)
       end
 
       it 'does not set the value for register 1' do
-        expect { cpu.cycle }.not_to change(cpu, :r1)
+        expect { vs_cpu.cycle }.not_to change(vs_cpu, :r1)
       end
 
       it 'sets the value for register 2' do
-        expect { cpu.cycle }.to change(cpu, :r2).from(0x00000000).to(0x00002BCD)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :r2).from(0x00000000).to(0x00002BCD)
       end
     end
 
@@ -265,23 +265,23 @@ RSpec.describe VerySimpleCPU, :integ do
       let(:instruction_word) { VerySimpleCPU::InstructionWord.new(opcode: 0b110, im: 0, a: 0x0004, b: 0x0008) }
 
       it 'does not update the memory' do
-        expect { cpu.cycle }.not_to(change { cpu.memory.content })
+        expect { vs_cpu.cycle }.not_to(change { vs_cpu.memory.content })
       end
 
       it 'sets the instruction word' do
-        expect { cpu.cycle }.to change(cpu, :iw).from(0x00000000).to(instruction_word.to_i)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :iw).from(0x00000000).to(instruction_word.to_i)
       end
 
       it 'sets the program counter' do
-        expect { cpu.cycle }.to change(cpu, :pc).from(0x0000).to(0x1234)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :pc).from(0x0000).to(0x1234)
       end
 
       it 'sets the value for register 1' do
-        expect { cpu.cycle }.to change(cpu, :r1).from(0x00000000).to(0x12345678)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :r1).from(0x00000000).to(0x12345678)
       end
 
       it 'sets the value for register 2' do
-        expect { cpu.cycle }.to change(cpu, :r2).from(0x00000000).to(0x00000000)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :r2).from(0x00000000).to(0x00000000)
       end
     end
 
@@ -298,23 +298,23 @@ RSpec.describe VerySimpleCPU, :integ do
       let(:instruction_word) { VerySimpleCPU::InstructionWord.new(opcode: 0b110, im: 0, a: 0x0004, b: 0x0008) }
 
       it 'does not update the memory' do
-        expect { cpu.cycle }.not_to(change { cpu.memory.content })
+        expect { vs_cpu.cycle }.not_to(change { vs_cpu.memory.content })
       end
 
       it 'sets the instruction word' do
-        expect { cpu.cycle }.to change(cpu, :iw).from(0x00000000).to(instruction_word.to_i)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :iw).from(0x00000000).to(instruction_word.to_i)
       end
 
       it 'increases the program counter' do
-        expect { cpu.cycle }.to change(cpu, :pc).from(0x0000).to(0x0001)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :pc).from(0x0000).to(0x0001)
       end
 
       it 'sets the value for register 1' do
-        expect { cpu.cycle }.to change(cpu, :r1).from(0x00000000).to(0x12345678)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :r1).from(0x00000000).to(0x12345678)
       end
 
       it 'sets the value for register 2' do
-        expect { cpu.cycle }.to change(cpu, :r2).from(0x00000000).to(0x00000001)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :r2).from(0x00000000).to(0x00000001)
       end
     end
 
@@ -330,23 +330,23 @@ RSpec.describe VerySimpleCPU, :integ do
       let(:instruction_word) { VerySimpleCPU::InstructionWord.new(opcode: 0b110, im: 1, a: 0x0004, b: 0x0765) }
 
       it 'does not update the memory' do
-        expect { cpu.cycle }.not_to(change { cpu.memory.content })
+        expect { vs_cpu.cycle }.not_to(change { vs_cpu.memory.content })
       end
 
       it 'sets the instruction word' do
-        expect { cpu.cycle }.to change(cpu, :iw).from(0x00000000).to(instruction_word.to_i)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :iw).from(0x00000000).to(instruction_word.to_i)
       end
 
       it 'sets the program counter' do
-        expect { cpu.cycle }.to change(cpu, :pc).from(0x0000).to(0x1999)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :pc).from(0x0000).to(0x1999)
       end
 
       it 'sets the value for register 1' do
-        expect { cpu.cycle }.to change(cpu, :r1).from(0x00000000).to(0xABCD8765)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :r1).from(0x00000000).to(0xABCD8765)
       end
 
       it 'sets the value for register 2' do
-        expect { cpu.cycle }.to change(cpu, :r2).from(0x00000000).to(0x00001234)
+        expect { vs_cpu.cycle }.to change(vs_cpu, :r2).from(0x00000000).to(0x00001234)
       end
     end
   end
