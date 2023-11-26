@@ -47,4 +47,12 @@ require 'yard'
 
 YARD::Rake::YardocTask.new
 
-task default: %i[sorbet spec rubocop yard]
+CLOBBER.include(
+  # RSpec generated files
+  File.join('tmp', 'rspec'),
+  # YARD generated files
+  File.join('.yardoc'),
+  File.join('doc')
+)
+
+task default: %i[sorbet spec rubocop yard build]
