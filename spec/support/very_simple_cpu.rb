@@ -5,7 +5,9 @@ require 'dumb_vm'
 # This file is a test for describing the VerySimpleCPU architecture with the
 # DumbVM DSL, details for the architecture can be found here: http://www.cpu.tc/rtl/
 
-DumbVM.describe(VerySimpleCPU) do
+class VerySimpleCPU
+  extend DumbVM::DSL
+
   # Instruction word
   register :iw, size: bits(32)
   # Program counter

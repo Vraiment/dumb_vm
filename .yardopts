@@ -1,2 +1,9 @@
+--markup markdown
 --fail-on-warning
---files lib/**/*.rb lib/dumb_vm.rb # Ensure `dumb_vm.rb` is last as the top level documentation is there
+# We need to manually set the order of the files to ensure stuff like Sorbet's
+# sigils don't show up as documentation.
+lib/dumb_vm/bit_length.rb
+lib/dumb_vm/dsl.rb
+lib/dumb_vm/register.rb
+lib/dumb_vm/version.rb
+lib/dumb_vm.rb

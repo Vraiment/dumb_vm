@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 # typed: strong
 
-require 'sorbet-runtime'
-
 class VerySimpleCPU
   # Class to represent an instruction word
   class InstructionWord

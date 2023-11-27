@@ -8,12 +8,14 @@ require_relative '../support/very_simple_cpu'
 RSpec.describe VerySimpleCPU, :integ do
   subject(:vs_cpu) { described_class.new }
 
-  before { pending('Not implemented') }
-
   shared_context 'with an initialized memory' do
     before do
       vs_cpu.memory = DumbVM::Memory.from_array(initial_memory.dup)
     end
+  end
+
+  it 'extends DumbVM::DSL' do
+    expect(described_class).to be_a(DumbVM::DSL)
   end
 
   describe '#iw' do
@@ -43,6 +45,8 @@ RSpec.describe VerySimpleCPU, :integ do
   end
 
   describe '#fetch' do
+    before { pending('Not implemented') }
+
     context 'with an instruction on memory' do
       include_context 'with an initialized memory'
 
@@ -60,6 +64,8 @@ RSpec.describe VerySimpleCPU, :integ do
   end
 
   describe '#decode' do
+    before { pending('Not implemented') }
+
     context 'when the instruction word is for the ADD operation' do
       before { vs_cpu.iw <= VerySimpleCPU::InstructionWord.new(opcode: 0b000, im: 1).to_i }
 
@@ -110,6 +116,8 @@ RSpec.describe VerySimpleCPU, :integ do
   end
 
   describe '#cycle' do
+    before { pending('Not implemented') }
+
     context 'when the next instruction is an ADD instruction' do
       include_context 'with an initialized memory'
 
