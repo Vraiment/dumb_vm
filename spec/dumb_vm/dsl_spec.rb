@@ -31,4 +31,29 @@ RSpec.describe DumbVM::DSL do
       end
     end
   end
+
+  describe '#fetch' do
+    let(:instance) { vm_class.new }
+
+    it 'defines a #fetch method' do
+      vm_class.fetch {} # rubocop:disable Lint/EmptyBlock
+
+      expect(instance).to respond_to(:fetch)
+    end
+
+    it 'defines a #fetch method that calls the given block' do
+      block_called = false
+      vm_class.fetch { block_called = true }
+
+      expect { instance.fetch }.to change { block_called }.from(false).to(true)
+    end
+
+    it 'defines a #fetch method that calls the given block on the context of the class' do
+      vm_class.define_method(:value) { instance_variable_get('@value') }
+      vm_class.define_method(:value=) { |value| instance_variable_set('@value', value) }
+      vm_class.fetch { self.value = :called }
+
+      expect { instance.fetch }.to change(instance, :value).from(nil).to(:called)
+    end
+  end
 end

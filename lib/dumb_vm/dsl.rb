@@ -8,6 +8,8 @@ module DumbVM
   # class MyCPU
   #   register :program_counter, size: bits(8), init_value: 0
   #   register :instruction, size: bits(32)
+  #
+  #   fetch { instruction <= memory.read_bits(32, offset: program_counter) }
   # end
   # ```
   module DSL
@@ -47,8 +49,20 @@ module DumbVM
       BitLength.new(count)
     end
 
-    sig { void }
-    def fetch; end
+    sig { params(block: T.proc.void).void }
+    # Declares the fetch logic
+    #
+    # @yield The block to execute when fetching instructions from the CPU
+    def fetch(&block)
+      # This is to make Sorbet happy, it will complaint just calling class methods
+      # so we "let" the module be "untyped" (which means a dynamic value for Sorbet)
+      # and then cast it to a `Class` object (of type anything)
+      clazz = T.cast(T.let(self, T.untyped), T::Class[T.anything])
+      # Cast the block so it can be passed to `instance_exec` later
+      typed_block = T.cast(block, T.proc.params(_: T.untyped).returns(T.anything))
+
+      clazz.define_method(:fetch) { instance_exec(&typed_block) }
+    end
 
     sig { void }
     def decode; end
