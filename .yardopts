@@ -4,6 +4,8 @@
 # sigils don't show up as documentation.
 lib/dumb_vm/bit_length.rb
 lib/dumb_vm/dsl.rb
+lib/dumb_vm/memory.rb
+lib/dumb_vm/memory/array_based.rb
 lib/dumb_vm/register.rb
 lib/dumb_vm/version.rb
 lib/dumb_vm.rb
