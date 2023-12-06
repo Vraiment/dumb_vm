@@ -3,6 +3,8 @@
 
 require_relative 'dumb_vm/bit_length'
 require_relative 'dumb_vm/dsl'
+require_relative 'dumb_vm/memory'
+require_relative 'dumb_vm/memory/array_based'
 require_relative 'dumb_vm/register'
 require_relative 'dumb_vm/version'
 
@@ -14,6 +16,4 @@ module DumbVM
   class Error < StandardError; end
 
   class InvalidStateException; end # rubocop:disable Lint/EmptyClass
-
-  class Memory; end # rubocop:disable Lint/EmptyClass
 end

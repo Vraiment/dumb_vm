@@ -2,13 +2,15 @@
 
 require 'dumb_vm'
 
+require_relative '../support/have_signature_for'
+
 RSpec.describe DumbVM::DSL do
   subject(:vm_class) { Class.new { extend DumbVM::DSL } }
 
+  let(:instance) { vm_class.new }
+
   describe '#register' do
     context 'when a register is defined' do
-      subject(:instance) { vm_class.new }
-
       before { vm_class.register :my_register, size: DumbVM::BitLength.bits(8) }
 
       it 'defines a register with the given size', :aggregate_failures do
@@ -19,8 +21,6 @@ RSpec.describe DumbVM::DSL do
     end
 
     context 'when a register is defined with an initial value' do
-      subject(:instance) { vm_class.new }
-
       before { vm_class.register :my_register, size: DumbVM::BitLength.bits(8), init_value: 15 }
 
       it 'defines a register with the given size', :aggregate_failures do
@@ -33,8 +33,6 @@ RSpec.describe DumbVM::DSL do
   end
 
   describe '#fetch' do
-    let(:instance) { vm_class.new }
-
     it 'defines a #fetch method' do
       vm_class.fetch {} # rubocop:disable Lint/EmptyBlock
 
@@ -54,6 +52,38 @@ RSpec.describe DumbVM::DSL do
       vm_class.fetch { self.value = :called }
 
       expect { instance.fetch }.to change(instance, :value).from(nil).to(:called)
+    end
+  end
+
+  describe '.extended' do
+    it 'defines a #memory accessor with the correct signature' do
+      expect(instance).to have_signature_for(:memory)
+        .without_params
+        .with_return_type(T.nilable(DumbVM::Memory))
+    end
+
+    it 'defines a #memory that returns the value of the instance variable', :aggregate_failures do
+      expect(instance).to respond_to(:memory)
+
+      memory = instance_double(DumbVM::Memory)
+      instance.instance_variable_set(:@memory, memory)
+
+      expect(instance.memory).to be(memory)
+    end
+
+    it 'defines a #memory= accessor with the correct signature' do
+      expect(instance).to have_signature_for(:memory=)
+        .with_params(memory: T.nilable(DumbVM::Memory))
+        .with_return_type(T.nilable(DumbVM::Memory))
+    end
+
+    it 'defines a #memory= accessor that sets and returns the value of the instance variable', :aggregate_failures do
+      expect(instance).to respond_to(:memory=)
+
+      memory = instance_double(DumbVM::Memory)
+
+      expect { expect(instance.memory = memory).to be(memory) }
+        .to change { instance.instance_variable_get(:@memory) }.from(nil).to(memory)
     end
   end
 end

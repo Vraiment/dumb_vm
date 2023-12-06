@@ -15,6 +15,25 @@ module DumbVM
   module DSL
     extend T::Sig
 
+    sig { params(other: Module).void }
+    # @!visibility private
+    def self.extended(other)
+      other.extend(T::Sig) unless other.is_a?(T::Sig)
+
+      other.class_eval <<-CLASS, __FILE__, __LINE__ + 1
+        sig { returns(T.nilable(Memory)) }
+        # !attribute [rw] memory
+        #   @return [Memory] The memory for the VM
+        attr_reader :memory
+
+        sig { params(memory: T.nilable(Memory)).returns(T.nilable(Memory)) }
+        # @!visibility private
+        def memory=(memory)
+          @memory = memory
+        end
+      CLASS
+    end
+
     sig { params(name: Symbol, size: BitLength, init_value: T.nilable(Integer)).void }
     # Declares a new register with the given `name`
     #
