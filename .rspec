@@ -1,7 +1,7 @@
 --format documentation
---out tmp/rspec/output.txt
+--out spec/reports/default/output.txt
 --format html
---out tmp/rspec/index.html
+--out spec/reports/default/index.html
 --format progress
 --color
 --require spec_helper

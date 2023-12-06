@@ -11,9 +11,9 @@ namespace :spec do
   RSpec::Core::RakeTask.new(:unit) do |task|
     task.rspec_opts = %w[
       --format documentation
-      --out tmp/rspec/unit/output.txt
+      --out spec/reports/unit/output.txt
       --format html
-      --out tmp/rspec/unit/index.html
+      --out spec/reports/unit/index.html
       --format progress
       --tag ~integ
     ]
@@ -23,9 +23,9 @@ namespace :spec do
   RSpec::Core::RakeTask.new(:integ) do |task|
     task.rspec_opts = %w[
       --format documentation
-      --out tmp/rspec/integ/output.txt
+      --out spec/reports/integ/output.txt
       --format html
-      --out tmp/rspec/integ/index.html
+      --out spec/reports/integ/index.html
       --format progress
       --tag integ
     ]
@@ -49,7 +49,7 @@ YARD::Rake::YardocTask.new
 
 CLOBBER.include(
   # RSpec generated files
-  File.join('tmp', 'rspec'),
+  File.join('spec', 'reports'),
   # YARD generated files
   File.join('.yardoc'),
   File.join('doc')
