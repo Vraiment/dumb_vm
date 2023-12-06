@@ -39,6 +39,8 @@ GEM
     rspec-mocks (3.12.6)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
+    rspec-sorbet (1.9.2)
+      sorbet-runtime
     rspec-support (3.12.1)
     rubocop (1.57.2)
       json (~> 2.3)
@@ -102,6 +104,7 @@ DEPENDENCIES
   dumb_vm!
   rake (~> 13.0)
   rspec (~> 3.0)
+  rspec-sorbet
   rubocop (~> 1.21)
   rubocop-rake
   rubocop-rspec
