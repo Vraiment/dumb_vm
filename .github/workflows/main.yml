@@ -25,3 +25,11 @@ jobs:
         bundler-cache: true
     - name: Run the default task
       run: bundle exec rake
+    - name: Archive output
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        path: |
+          doc
+          pkg/dumb_vm-*.gem
+          spec/reports
