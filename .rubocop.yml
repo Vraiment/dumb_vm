@@ -5,3 +5,8 @@ AllCops:
 require:
   - rubocop-rake
   - rubocop-rspec
+
+RSpec/DescribeClass:
+  IgnoredMetadata:
+    type:
+      - matcher
