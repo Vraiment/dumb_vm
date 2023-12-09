@@ -46,20 +46,16 @@ module DumbVM
     #
     # @return [Void]
     def register(name, size:, init_value: nil)
-      # This is to make Sorbet happy, it will complaint just calling class methods
-      # so we "let" the module be "untyped" (which means a dynamic value for Sorbet)
-      # and then cast it to a `Class` object (of type anything)
-      clazz = T.cast(T.let(self, T.untyped), T::Class[T.anything])
+      T.bind(self, T::Class[T.anything])
 
-      clazz.define_method(name) do
-        unless clazz.instance_variable_defined?("@#{name}")
-          register = Register.new(size)
-          register <= init_value if init_value
+      send(:sig) { T.cast(self, T::Private::Methods::DeclBuilder).returns(Register) }
+      define_method(name) do
+        return instance_variable_get("@#{name}") if instance_variable_defined?("@#{name}")
 
-          clazz.instance_variable_set("@#{name}", register)
-        end
+        register = Register.new(size)
+        register <= init_value if init_value
 
-        clazz.instance_variable_get("@#{name}")
+        instance_variable_set("@#{name}", register)
       end
     end
 
