@@ -25,11 +25,27 @@ jobs:
         bundler-cache: true
     - name: Run the default task
       run: bundle exec rake
-    - name: Archive output
+    - name: Archive RSpec reports for unit tests
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        path: |
+          spec/reports/unit
+    - name: Archive RSpec reports for integ tests
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        path: |
+          spec/reports/integ
+    - name: Archive Gem
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        path: |
+          pkg/dumb_vm-*.gem
+    - name: Archive documentation
       uses: actions/upload-artifact@v3
       with:
         name: artifacts
         path: |
           doc
-          pkg/dumb_vm-*.gem
-          spec/reports
