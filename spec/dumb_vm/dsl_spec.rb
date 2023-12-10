@@ -59,6 +59,14 @@ RSpec.describe DumbVM::DSL do
       expect(instance).to respond_to(:fetch)
     end
 
+    it 'defines the correct signature for the #fetch method' do
+      vm_class.fetch {} # rubocop:disable Lint/EmptyBlock
+
+      expect(instance).to have_signature_for(:fetch)
+        .without_params
+        .without_return_type
+    end
+
     it 'defines a #fetch method that calls the given block' do
       block_called = false
       vm_class.fetch { block_called = true }

@@ -65,18 +65,14 @@ module DumbVM
     end
 
     sig { params(block: T.proc.void).void }
-    # Declares the fetch logic
-    #
-    # @yield The block to execute when fetching instructions from the CPU
     def fetch(&block)
-      # This is to make Sorbet happy, it will complaint just calling class methods
-      # so we "let" the module be "untyped" (which means a dynamic value for Sorbet)
-      # and then cast it to a `Class` object (of type anything)
-      clazz = T.cast(T.let(self, T.untyped), T::Class[T.anything])
+      T.bind(self, T::Class[T.anything])
+
       # Cast the block so it can be passed to `instance_exec` later
       typed_block = T.cast(block, T.proc.params(_: T.untyped).returns(T.anything))
 
-      clazz.define_method(:fetch) { instance_exec(&typed_block) }
+      send(:sig) { T.cast(self, T::Private::Methods::DeclBuilder).void }
+      define_method(:fetch) { instance_exec(&typed_block) }
     end
 
     sig { void }
