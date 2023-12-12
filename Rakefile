@@ -36,6 +36,8 @@ desc 'Run sorbet type checks'
 task :sorbet do
   require 'English'
 
+  puts 'Running Sorbet...'
+
   exit $CHILD_STATUS&.exitstatus || 1 unless system('srb')
 end
 
