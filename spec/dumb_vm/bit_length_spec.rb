@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'dumb_vm'
-
 RSpec.describe DumbVM::BitLength do
   subject(:bit_length) { described_class.new(0) }
 

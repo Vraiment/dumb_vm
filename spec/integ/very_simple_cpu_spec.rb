@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'dumb_vm'
-
 require_relative '../shared_examples/a_register'
 require_relative '../support/very_simple_cpu'
 

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'dumb_vm'
-
 RSpec.describe DumbVM::Register do
   subject(:register) { described_class.new(size) }
 

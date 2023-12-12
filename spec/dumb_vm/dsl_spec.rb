@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'dumb_vm'
-
 require_relative '../support/have_signature_for'
 
 RSpec.describe DumbVM::DSL do

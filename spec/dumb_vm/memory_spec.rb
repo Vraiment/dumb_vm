@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'dumb_vm'
-
 RSpec.describe DumbVM::Memory do
   describe '.from_array' do
     it 'creates an instance of DumbVM::Memory::ArrayBased' do
