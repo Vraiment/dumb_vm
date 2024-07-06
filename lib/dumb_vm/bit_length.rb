@@ -50,5 +50,11 @@ module DumbVM
     #
     # @return [Boolean] True if both are a {BitLength} and have the same amount of bits
     def ==(other) = T.cast(other, Object).is_a?(BitLength) && T.cast(other, BitLength).bits == bits
+
+    sig { returns(String) }
+    # Returns a string value for the bit length
+    #
+    # @return [String] A string represntation of the string length
+    def to_s = "{:bits=>#{bits}, :bytes=>#{bytes}}"
   end
 end

@@ -67,4 +67,18 @@ RSpec.describe DumbVM::BitLength do
       expect(bit_length.bytes).to be(4)
     end
   end
+
+  describe '#to_s' do
+    it 'converts the value to a string' do
+      expect(bit_length.to_s).to eq('{:bits=>0, :bytes=>0}')
+    end
+
+    context 'with a non zero amount' do
+      subject(:bit_length) { described_class.new(8) }
+
+      it 'converts the value to a string' do
+        expect(bit_length.to_s).to eq('{:bits=>8, :bytes=>1}')
+      end
+    end
+  end
 end
