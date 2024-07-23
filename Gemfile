@@ -20,6 +20,7 @@ gem 'sorbet', group: :development
 gem 'sorbet-runtime'
 
 group :development, :test do
+  gem 'ruby-lsp', require: false
   gem 'tapioca', require: false
 end
 
