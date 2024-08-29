@@ -3,6 +3,7 @@ set -euo pipefail
 IFS=$'\n\t'
 set -vx
 
+bundle config set --local path tmp/vendor/bundle # Ensure gems are local to the gem 
 bundle install
 
 # Do any other automated setup that you need to do here
